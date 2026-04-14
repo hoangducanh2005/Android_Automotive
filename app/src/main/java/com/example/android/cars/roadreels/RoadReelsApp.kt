@@ -1,12 +1,11 @@
-
-
 package com.example.android.cars.roadreels
 //add navigation button (from detail screen to homescreen)
-
+//add item button's lib
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,10 +50,7 @@ fun RoadReelsApp(
                     title = { Text(stringResource(R.string.app_name)) },
                     scrollBehavior = scrollBehavior,
                 )
-            } else if (route?.startsWith(Screen.Detail.name) == true) {
-                CenterAlignedTopAppBar(
-                    title = { Text(stringResource(R.string.bbb_title)) }
-                )
+
             } else if (route?.startsWith(Screen.Detail.name) == true) {
                 CenterAlignedTopAppBar(
                     title = { Text(stringResource(R.string.bbb_title)) },
