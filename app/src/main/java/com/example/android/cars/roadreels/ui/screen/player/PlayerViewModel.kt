@@ -34,14 +34,17 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+// Thay thế đoạn cũ bằng đoạn này
 val MEDIA_SOURCE =
-    MediaItem.fromUri("https://storage.googleapis.com/androiddevelopers/samples_assets/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+    MediaItem.fromUri("android.resource://com.example.android.cars.roadreels/raw/doahong")
         .buildUpon().setMediaMetadata(
             MediaMetadata.Builder()
-                .setTitle("Big Buck Bunny")
+                .setTitle("Đóa Hồng")
                 .setArtworkUri("https://peach.blender.org/wp-content/uploads/title_anouncement.jpg".toUri())
                 .build()
         ).build()
+
+
 
 @UnstableApi
 class PlayerViewModel(application: Application) : AndroidViewModel(application), Player.Listener {
