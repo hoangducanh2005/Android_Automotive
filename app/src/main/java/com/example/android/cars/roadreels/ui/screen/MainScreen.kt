@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,9 +36,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.android.cars.roadreels.R
 
-private const val NUM_ROWS = 1
-private const val NUM_ITEMS_PER_ROW = 6
-
 data class MovieItem(
     val id: Int,
     val title: String,
@@ -45,7 +43,7 @@ data class MovieItem(
     val videoResId: Int
 )
 
-private val MOVIE_LIST = listOf(
+val MOVIE_LIST = listOf(
     MovieItem(1, "Đóa Hồng", R.drawable.doahong, R.raw.doahong),
     MovieItem(2, "Khách Thơ", R.drawable.khach_tho, R.raw.khachtho),
     MovieItem(3, "Chưa Bao Giờ", R.drawable.chuabaogio, R.raw.chuabaogio),
@@ -53,10 +51,6 @@ private val MOVIE_LIST = listOf(
     MovieItem(5, "Cô Gái Đến Từ Hôm Qua", R.drawable.cogaidentuhomqua, R.raw.cogaidentuhomqua),
     MovieItem(6, "Vẹn Nguyên", R.drawable.vennguyen, R.raw.vennguyen),
     MovieItem(7, "Ending Đà Lạt", R.drawable.endingdalat, R.raw.endingdalat)
-)
-
-private val THUMBNAIL_IDS = listOf(
-    R.drawable.doahong
 )
 
 @Composable
@@ -68,9 +62,9 @@ fun MainScreen(
         modifier,
         contentPadding = PaddingValues(bottom = dimensionResource(R.dimen.screen_edge_padding))
     ) {
-        items(NUM_ROWS) {
+        item {
             Text(
-                "My Videos", // Tiêu đề danh sách phim
+                "Phim của tôi",
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .padding(
@@ -83,15 +77,14 @@ fun MainScreen(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.list_item_spacing)),
                 contentPadding = PaddingValues(horizontal = dimensionResource(R.dimen.screen_edge_padding))
             ) {
-                items(NUM_ITEMS_PER_ROW) {
-                    val thumbnailId = THUMBNAIL_IDS[0]
-
+                // Duyệt qua MOVIE_LIST để hiển thị tất cả video
+                items(MOVIE_LIST) { movie ->
                     Image(
-                        painter = painterResource(thumbnailId),
-                        contentDescription = null,
+                        painter = painterResource(movie.thumbnailResId),
+                        contentDescription = movie.title,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .clickable { onItemSelected(thumbnailId) }
+                            .clickable { onItemSelected(movie.thumbnailResId) }
                             .size(width = 320.dp, height = 180.dp)
                             .clip(MaterialTheme.shapes.medium)
                     )

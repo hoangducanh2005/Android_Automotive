@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -58,6 +59,7 @@ data class PlayerUiState(
 @UnstableApi
 @Composable
 fun PlayerScreen(
+    thumbnailId: Int, // Nhận ID video được truyền sang
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlayerViewModel = viewModel()
@@ -72,6 +74,11 @@ fun PlayerScreen(
     val player by viewModel.player.collectAsState()
     val playerUiState by viewModel.uiState.collectAsState()
 
+    // Tải đúng video khi màn hình được hiển thị
+    LaunchedEffect(thumbnailId) {
+        viewModel.loadVideo(thumbnailId)
+    }
+
     DisposableEffect(Unit) {
         activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 
@@ -80,9 +87,7 @@ fun PlayerScreen(
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
         onDispose {
-            // Reset the requested orientation to the default
             activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
             windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
             windowInsetsController.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_DEFAULT

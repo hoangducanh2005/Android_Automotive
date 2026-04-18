@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// lam chinh tai day
+
 package com.example.android.cars.roadreels
 
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -31,6 +31,7 @@ import com.example.android.cars.roadreels.ui.screen.DetailScreen
 import com.example.android.cars.roadreels.ui.screen.MainScreen
 import com.example.android.cars.roadreels.ui.screen.Screen
 import com.example.android.cars.roadreels.ui.screen.player.PlayerScreen
+
 @Composable
 fun RoadReelsNavHost(
     windowSizeClass: WindowSizeClass,
@@ -50,19 +51,24 @@ fun RoadReelsNavHost(
         composable(
             route = "${Screen.Detail.name}/{id}",
             arguments = listOf(navArgument(name = "id") { type = NavType.IntType })
-        ) {
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id")!!
             DetailScreen(
-                thumbnailId = it.arguments?.getInt("id")!!,
+                thumbnailId = id,
                 windowSizeClass = windowSizeClass,
-                onPlayButtonClicked = { navController.navigate(Screen.Player.name) }
+                onPlayButtonClicked = { navController.navigate("${Screen.Player.name}/$id") } // Truyền ID sang Player
             )
         }
         composable(
-            route = Screen.Player.name,
+            route = "${Screen.Player.name}/{id}", // Nhận ID tại đây
+            arguments = listOf(navArgument(name = "id") { type = NavType.IntType }),
             enterTransition = { EnterTransition.None  },
             exitTransition = { ExitTransition.None }
-        ) {
-            PlayerScreen(onClose = { navController.popBackStack() })
+        ) { backStackEntry ->
+            PlayerScreen(
+                thumbnailId = backStackEntry.arguments?.getInt("id")!!,
+                onClose = { navController.popBackStack() }
+            )
         }
     }
 }
