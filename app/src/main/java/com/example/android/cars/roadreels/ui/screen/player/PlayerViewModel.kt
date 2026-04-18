@@ -17,14 +17,14 @@
 package com.example.android.cars.roadreels.ui.screen.player
 
 import android.app.Application
-import androidx.core.net.toUri
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import com.example.android.cars.roadreels.ui.screen.MOVIE_LIST
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,17 +33,6 @@ import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-val MEDIA_SOURCE =
-    MediaItem.fromUri("android.resource://com.example.android.cars.roadreels/raw/doahong")
-        .buildUpon().setMediaMetadata(
-            MediaMetadata.Builder()
-                .setTitle("Đóa Hồng")
-                .setArtworkUri("android.resource://com.example.android.cars.roadreels/drawable/doahong".toUri())
-                .build()
-        ).build()
-
-
 
 @UnstableApi
 class PlayerViewModel(application: Application) : AndroidViewModel(application), Player.Listener {
@@ -62,8 +51,6 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
                 playerUiStateUpdateJob?.cancel()
 
                 if (player != null) {
-                    initializePlayer(player)
-
                     playerUiStateUpdateJob = viewModelScope.launch {
                         while (true) {
                             delay(500)
@@ -79,25 +66,30 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application),
         _player.update { ExoPlayer.Builder(application).build() }
     }
 
-    private fun initializePlayer(player: Player) {
-        player.setMediaItem(MEDIA_SOURCE)
-        player.prepare()
-        player.playWhenReady = true
+    fun loadVideo(thumbnailId: Int) {
+        val movie = MOVIE_LIST.find { it.thumbnailResId == thumbnailId } ?: return
+        val videoUri = Uri.parse("android.resource://${getApplication<Application>().packageName}/${movie.videoResId}")
+        val mediaItem = MediaItem.fromUri(videoUri)
 
-        player.addListener(object : Player.Listener {
-            override fun onEvents(player: Player, events: Player.Events) {
-                super.onEvents(player, events)
-
-                if (events.contains(Player.EVENT_MEDIA_METADATA_CHANGED)
-                    || events.contains(Player.EVENT_IS_LOADING_CHANGED)
-                    || events.contains(Player.EVENT_IS_PLAYING_CHANGED)
-                ) {
-                    _uiState.getAndUpdate {
-                        it.withPlayerState(player)
+        _player.value?.let { player ->
+            player.setMediaItem(mediaItem)
+            player.prepare()
+            player.playWhenReady = true
+            
+            player.addListener(object : Player.Listener {
+                override fun onEvents(player: Player, events: Player.Events) {
+                    super.onEvents(player, events)
+                    if (events.contains(Player.EVENT_MEDIA_METADATA_CHANGED)
+                        || events.contains(Player.EVENT_IS_LOADING_CHANGED)
+                        || events.contains(Player.EVENT_IS_PLAYING_CHANGED)
+                    ) {
+                        _uiState.getAndUpdate {
+                            it.withPlayerState(player)
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
 
     fun play() {
