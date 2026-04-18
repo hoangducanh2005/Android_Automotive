@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -36,16 +35,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.android.cars.roadreels.R
 
-private const val NUM_ROWS = 10
-private const val NUM_ITEMS_PER_ROW = 15
+private const val NUM_ROWS = 1
+private const val NUM_ITEMS_PER_ROW = 6
+
+data class MovieItem(
+    val id: Int,
+    val title: String,
+    val thumbnailResId: Int,
+    val videoResId: Int
+)
+
+private val MOVIE_LIST = listOf(
+    MovieItem(1, "Đóa Hồng", R.drawable.doahong, R.raw.doahong),
+    MovieItem(2, "Khách Thơ", R.drawable.khach_tho, R.raw.khachtho),
+    MovieItem(3, "Chưa Bao Giờ", R.drawable.chuabaogio, R.raw.chuabaogio),
+    MovieItem(4, "LK Dạ Vàng", R.drawable.lkdavang, R.raw.lkdavang),
+    MovieItem(5, "Cô Gái Đến Từ Hôm Qua", R.drawable.cogaidentuhomqua, R.raw.cogaidentuhomqua),
+    MovieItem(6, "Vẹn Nguyên", R.drawable.vennguyen, R.raw.vennguyen),
+    MovieItem(7, "Ending Đà Lạt", R.drawable.endingdalat, R.raw.endingdalat)
+)
 
 private val THUMBNAIL_IDS = listOf(
-    R.drawable.bbb_splash,
-    R.drawable.bunny_bow,
-    R.drawable.evil_frank,
-    R.drawable.its_a_trap,
-    R.drawable.rinkysplash,
-    R.drawable.rodents
+    R.drawable.doahong
 )
 
 @Composable
@@ -57,9 +68,9 @@ fun MainScreen(
         modifier,
         contentPadding = PaddingValues(bottom = dimensionResource(R.dimen.screen_edge_padding))
     ) {
-        items(NUM_ROWS) { rowIndex: Int ->
+        items(NUM_ROWS) {
             Text(
-                "Row $rowIndex",
+                "My Videos", // Tiêu đề danh sách phim
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .padding(
@@ -72,8 +83,8 @@ fun MainScreen(
                 horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.list_item_spacing)),
                 contentPadding = PaddingValues(horizontal = dimensionResource(R.dimen.screen_edge_padding))
             ) {
-                items(NUM_ITEMS_PER_ROW) { _ ->
-                    val thumbnailId = rememberSaveable { THUMBNAIL_IDS.random() }
+                items(NUM_ITEMS_PER_ROW) {
+                    val thumbnailId = THUMBNAIL_IDS[0]
 
                     Image(
                         painter = painterResource(thumbnailId),
@@ -81,7 +92,7 @@ fun MainScreen(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .clickable { onItemSelected(thumbnailId) }
-                            .size(width = 200.dp, height = 100.dp)
+                            .size(width = 320.dp, height = 180.dp)
                             .clip(MaterialTheme.shapes.medium)
                     )
                 }
