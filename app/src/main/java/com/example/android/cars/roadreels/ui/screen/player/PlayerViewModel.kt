@@ -34,13 +34,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-// Thay thế đoạn cũ bằng đoạn này
 val MEDIA_SOURCE =
     MediaItem.fromUri("android.resource://com.example.android.cars.roadreels/raw/doahong")
         .buildUpon().setMediaMetadata(
             MediaMetadata.Builder()
                 .setTitle("Đóa Hồng")
-                .setArtworkUri("https://peach.blender.org/wp-content/uploads/title_anouncement.jpg".toUri())
+                .setArtworkUri("android.resource://com.example.android.cars.roadreels/drawable/doahong".toUri())
                 .build()
         ).build()
 
