@@ -16,22 +16,31 @@
 
 package com.example.android.cars.roadreels.ui.screen.player
 
+import androidx.annotation.OptIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.AspectRatioFrameLayout
 
+@OptIn(UnstableApi::class)
 @Composable
 fun PlayerView(
     player: Player,
     modifier: Modifier = Modifier
 ) {
     AndroidView(
-        factory = {
-            androidx.media3.ui.PlayerView(it).apply {
+        factory = { context ->
+            androidx.media3.ui.PlayerView(context).apply {
                 this.player = player
                 useController = false
+                // Sử dụng RESIZE_MODE_FILL để ép video lấp đầy màn hình ngay từ đầu, tránh nhảy kích thước
+                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
             }
+        },
+        update = { view ->
+            view.player = player
         },
         modifier = modifier
     )
