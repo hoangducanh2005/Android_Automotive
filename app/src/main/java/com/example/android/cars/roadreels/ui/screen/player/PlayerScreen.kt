@@ -112,7 +112,7 @@ fun PlayerScreen(
                 uiState = playerUiState,
                 onClose = onClose,
                 onPlayPause = { if (playerUiState.isPlaying) viewModel.pause() else viewModel.play() },
-                onSeek = viewModel::seekTo
+                onSeek = viewModel::seekTo // Kết nối event kéo thanh tua vid lên với viewModel
             )
         }
     }
