@@ -4,12 +4,13 @@ Android Automotive OS parked application designed for local video streaming insi
 This project demonstrates how a parked app can safely provide video playback when the vehicle is stationary, while automatically restricting playback once driving starts to comply with driver distraction safety requirements.
 
 ---
-
+## PLease follow the tutorial before deploying the service on Emulator
+---
 ## 🎬 Demo Video
 
-👉 **[Watch Road_Reels in action](https://your-demo-link.com)**
+👉 **[Watch Road_Reels in action](https://youtu.be/J72PlWt_eDg)**
 
----
+---   
 
 ## 🚀 Features
 
